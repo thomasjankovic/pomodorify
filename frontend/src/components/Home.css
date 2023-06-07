@@ -1,0 +1,14 @@
+.login-button {
+    margin: 1rem;
+    background-color: #1db954;
+    padding: 2rem 3rem;
+    font-size: 1.5rem;
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #1ed760;
+}
