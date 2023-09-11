@@ -1,0 +1,20 @@
+.playlist-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.playlist-buttons button {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #1db954;
+    transition: background-color 0.3s ease;
+    font-size: inherit;
+    border: none;
+}
+
+.playlist-buttons button:hover {
+    background-color: #1ed760;
+}

@@ -2,16 +2,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
+  background-color: #727272;
   padding: 0.5rem;
   border-radius: 0.5rem;
+  box-shadow: 4px 4px 50px 0px #121212;
 }
 
 .navbar-logo a {
-  color: #fff;
+  color: white;
   font-size: 1.5rem;
   text-decoration: none;
   padding: 0.5rem;
+  border-radius: 0.5rem;
 }
 
 .navbar-items {
@@ -20,18 +22,13 @@
 }
 
 .navbar-items a {
-  color: #fff;
+  color: white;
   text-decoration: none;
   padding: 0.5rem 0.5rem;
   border-radius: 0.5rem;
-  background-color: #555;
   transition: background-color 0.3s ease;
 }
 
 .navbar-items a:hover {
-  background-color: #777;
-}
-
-.navbar-items a.active {
-  background-color: #888;
+  background-color: #1ed760;
 }

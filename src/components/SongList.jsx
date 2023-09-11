@@ -28,5 +28,4 @@ const SongList = ({ songs }) => {
   );
 };
 
-
 export default SongList;

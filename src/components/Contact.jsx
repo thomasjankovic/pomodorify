@@ -9,9 +9,9 @@ const Contact = () => {
       <div className="contact-links">
         <a href="mailto:thomas@thomasjankovic.com"><FaEnvelope /> Email</a>
         <span className="contact-separator"></span>
-        <a href="https://github.com/thomasjankovic"><FaGithub /> GitHub</a>
+        <a href="https://github.com/thomasjankovic" target="_blank" rel="noopener noreferrer"><FaGithub /> GitHub</a>
         <span className="contact-separator"></span>
-        <a href="https://www.linkedin.com/in/thomas-jankovic/"><FaLinkedin /> LinkedIn</a>
+        <a href="https://www.linkedin.com/in/thomas-jankovic/" target="_blank" rel="noopener noreferrer"><FaLinkedin /> LinkedIn</a>
       </div>
     </div>
   );
