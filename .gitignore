@@ -163,5 +163,3 @@ dmypy.json
 # Specific dirs
 scratch
 node_modules
-frontend/scratch
-backend/scratch
