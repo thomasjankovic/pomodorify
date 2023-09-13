@@ -9,8 +9,8 @@ const Playlist = () => {
   const navigate = useNavigate();
 
   const fetchPlaylist = () => {
-      // axios.get('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist')
-      axios.get('http://localhost:8080')
+      axios.get('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist')
+      // axios.get('http://localhost:8080')
           .then(response => {
               // console.log('response.data:',response.data);
               setSongs(response.data);
