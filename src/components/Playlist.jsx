@@ -8,16 +8,23 @@ const Playlist = () => {
   const [songs, setSongs] = useState([]);
   const navigate = useNavigate();
 
+  const urlParams = new URLSearchParams(window.location.hash);
+  const userAccessToken = urlParams.get('#access_token');
+
   const fetchPlaylist = () => {
-      axios.get('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist')
-      // axios.get('http://localhost:8080')
-          .then(response => {
-              // console.log('response.data:',response.data);
-              setSongs(response.data);
-          })
-          .catch(error => {
-              // console.log('error:',error);
-          });
+    axios.get('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
+    // axios.get('http://localhost:8080', {
+      headers: {
+        'Authorization': `Bearer ${userAccessToken}`,
+      },      
+    })
+    .then(response => {
+      // console.log('response.data:',response.data);
+      setSongs(response.data);
+    })
+    .catch(error => {
+      // console.log('error:',error);
+    });
   };
 
   useEffect(() => {

@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Home.css'
 
 const Home = () => {
-  const OLDhandleLogin = () => {
+  const handleLogin = () => {
     const spotifyClientId = '99a9dbf0e4c44cca8f6218283681116a';
     // const redirectUri = 'http://localhost:3000/playlist';
     const redirectUri = 'https://pomodorify.thomasjankovic.com/playlist';
-    const authUrl = `https://accounts.spotify.com/authorize?client_id=${spotifyClientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    const scopes = 'user-library-read';
+    const state = generateRandomString(16);
+    const authUrl = `https://accounts.spotify.com/authorize?client_id=${spotifyClientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}&state=${encodeURIComponent(state)}`;
 
     window.open(authUrl, '_self');
-  };  
+  };
 
   const generateRandomString = (length) => {
     let text = '';
@@ -33,10 +35,10 @@ const Home = () => {
     return base64encode(digest);
   };
 
-  const handleLogin = () => {
+  const OLDhandleLogin = () => {
     const spotifyClientId = '99a9dbf0e4c44cca8f6218283681116a';
-    // const redirectUri = 'http://localhost:3000/playlist';
-    const redirectUri = 'https://pomodorify.thomasjankovic.com/playlist';
+    const redirectUri = 'http://localhost:3000/playlist';
+    // const redirectUri = 'https://pomodorify.thomasjankovic.com/playlist';
     const scopes = 'user-library-read';
     const codeVerifier = generateRandomString(128);
     generateCodeChallenge(codeVerifier).then((codeChallenge) => {
