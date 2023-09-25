@@ -2,27 +2,16 @@ import React from 'react';
 import './Home.css'
 
 const Home = () => {
-  const handleLogin = () => {
-    const spotifyClientId = '99a9dbf0e4c44cca8f6218283681116a';
-    // const redirectUri = 'http://localhost:3000/playlist';
-    const redirectUri = 'https://pomodorify.thomasjankovic.com/playlist';
-    const scopes = 'user-library-read';
-    const state = generateRandomString(16);
-    const authUrl = `https://accounts.spotify.com/authorize?client_id=${spotifyClientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}&state=${encodeURIComponent(state)}`;
-
-    window.open(authUrl, '_self');
-  };
-
-  const generateRandomString = (length) => {
+  function generateRandomString(length) {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     for (let i = 0; i < length; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
-  };
+  }
 
-  const generateCodeChallenge = async (codeVerifier) => {
+  async function generateCodeChallenge(codeVerifier) {
     function base64encode(string) {
       return btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
         .replace(/\+/g, '-')
@@ -33,20 +22,29 @@ const Home = () => {
     const data = encoder.encode(codeVerifier);
     const digest = await window.crypto.subtle.digest('SHA-256', data);
     return base64encode(digest);
-  };
+  }  
 
-  const OLDhandleLogin = () => {
-    const spotifyClientId = '99a9dbf0e4c44cca8f6218283681116a';
-    const redirectUri = 'http://localhost:3000/playlist';
-    // const redirectUri = 'https://pomodorify.thomasjankovic.com/playlist';
-    const scopes = 'user-library-read';
-    const codeVerifier = generateRandomString(128);
-    generateCodeChallenge(codeVerifier).then((codeChallenge) => {
+  const handleLogin = () => {
+    const clientId = '99a9dbf0e4c44cca8f6218283681116a';
+    // const redirectUri = 'http://localhost:3000/playlist';
+    const redirectUri = 'https://pomodorify.thomasjankovic.com/playlist';
+    let codeVerifier = generateRandomString(128);
+    generateCodeChallenge(codeVerifier).then(codeChallenge => {
+      let state = generateRandomString(16);
+      let scope = 'user-library-read';
       localStorage.setItem('code_verifier', codeVerifier);
-      const authUrl = `https://accounts.spotify.com/authorize?client_id=${spotifyClientId}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scopes)}&code_challenge_method=S256&code_challenge=${codeChallenge}`;
-      window.location.href = authUrl;
+      let args = new URLSearchParams({
+        response_type: 'code',
+        client_id: clientId,
+        scope: scope,
+        redirect_uri: redirectUri,
+        state: state,
+        code_challenge_method: 'S256',
+        code_challenge: codeChallenge
+      });
+      window.location = 'https://accounts.spotify.com/authorize?' + args;
     });
-  };
+  }
 
   return (
     <div className="section">

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import SongList from './SongList';
 import './Playlist.css';
@@ -8,24 +7,27 @@ const Playlist = () => {
   const [songs, setSongs] = useState([]);
   const navigate = useNavigate();
 
-  const urlParams = new URLSearchParams(window.location.hash);
-  const userAccessToken = urlParams.get('#access_token');
-
   const fetchPlaylist = () => {
-    axios.get('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
-    // axios.get('http://localhost:8080', {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    const code_verifier = localStorage.getItem('code_verifier');
+    // fetch('http://localhost:8080', {
+    fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
+      method: 'POST',
       headers: {
-        'Authorization': `Bearer ${userAccessToken}`,
-      },      
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 'code':code, 'code_verifier':code_verifier }),
     })
-    .then(response => {
-      // console.log('response.data:',response.data);
-      setSongs(response.data);
-    })
-    .catch(error => {
-      // console.log('error:',error);
-    });
-  };
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log('Received data:', data);
+        setSongs(data);
+      })
+      .catch((error) => {
+        // console.error('Error exchanging code:', error);
+      });
+  }
 
   useEffect(() => {
       fetchPlaylist();
