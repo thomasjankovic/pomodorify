@@ -1,3 +1,7 @@
+.playlist-container {
+    margin-top : 1rem;
+}
+
 .playlist-buttons {
     display: flex;
     justify-content: center;
@@ -17,4 +21,11 @@
 
 .playlist-buttons button:hover {
     background-color: #1ed760;
+}
+
+.spotify-logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
 }

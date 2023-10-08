@@ -16,7 +16,9 @@ const SongList = ({ songs }) => {
         <div className="song-list-item" key={index}>
           <div>{index + 1}</div>
           <div>
-            <img src={song.album_art_url} alt={song.album} />
+            <a target="_blank" rel="noopener" href={song.link}>
+              <img src={song.album_art_url} alt={song.album}/>
+            </a>
           </div>
           <div>{song.title}</div>
           <div>{song.artist}</div>

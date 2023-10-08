@@ -45,15 +45,17 @@ const Playlist = () => {
     
   return (
     <div>
-      <h2>Pomodoro Playlist</h2>
-      <div>
+      <div class="playlist-container">
         <SongList songs={songs} />
       </div>
       <div className="playlist-buttons">
-        <button>Change Duration</button>
-        <button>New Playlist</button>
-        <button>Download Playlist</button>
+        {/* <button>Change Duration</button>
+        <button>Regenerate Playlist</button>
+        <button>Export to Spotify</button> */}
         <button onClick={handleLogout}>Log Out</button>
+      </div>
+      <div class="spotify-logo">
+        <img style={{ width: "8rem" }} src="/images/Spotify_Logo_RGB_White.png" alt="Spotify Logo"/>
       </div>
     </div>
   );
