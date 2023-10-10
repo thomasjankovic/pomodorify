@@ -13,8 +13,8 @@ const Playlist = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const code_verifier = localStorage.getItem('code_verifier');
-    fetch('http://localhost:8080', {
-    // fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
+    // fetch('http://localhost:8080', {
+    fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
