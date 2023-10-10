@@ -5,14 +5,16 @@ import './Playlist.css';
 
 const Playlist = () => {
   const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const fetchPlaylist = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const code_verifier = localStorage.getItem('code_verifier');
-    // fetch('http://localhost:8080', {
-    fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
+    fetch('http://localhost:8080', {
+    // fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -21,11 +23,12 @@ const Playlist = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log('Received data:', data);
         setSongs(data);
+        setLoading(false);
       })
       .catch((error) => {
-        // console.error('Error exchanging code:', error);
+        setError('An error occurred while fetching data.');
+        setLoading(false);
       });
   }
 
@@ -40,21 +43,28 @@ const Playlist = () => {
     setTimeout(() => {
       popup.close();
       navigate('/');
-    }, 2000);
+    }, 1000);
   };  
     
   return (
     <div>
-      <div class="playlist-container">
-        <SongList songs={songs} />
-      </div>
-      <div className="playlist-buttons">
-        {/* <button>Change Duration</button>
-        <button>Regenerate Playlist</button>
-        <button>Export to Spotify</button> */}
-        <button onClick={handleLogout}>Log Out</button>
-      </div>
-      <div class="spotify-logo">
+      {loading ? (
+        <div className="loading-container">
+          <p>Loading... </p>
+          <img src="images/spinner.svg" alt="Loading..." />
+        </div>
+      ) : (
+        <div className="playlist-container">
+          <SongList songs={songs} />
+          <div className="playlist-buttons">
+            <button>Change Duration</button>
+            {/* <button>Regenerate Playlist</button> */}
+            {/* <button>Export to Spotify</button> */}
+            <button onClick={handleLogout}>Log Out</button>
+          </div>
+        </div>
+      )}
+      <div className="spotify-logo">
         <img style={{ width: "8rem" }} src="/images/Spotify_Logo_RGB_White.png" alt="Spotify Logo"/>
       </div>
     </div>

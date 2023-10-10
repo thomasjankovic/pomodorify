@@ -1,3 +1,14 @@
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3rem;
+}
+
+.loading-container p {
+    margin-right: 1rem;
+}
+
 .playlist-container {
     margin-top : 1rem;
 }
@@ -23,7 +34,7 @@
     background-color: #1ed760;
 }
 
-.spotify-logo{
+.spotify-logo {
     display: flex;
     justify-content: center;
     align-items: center;
