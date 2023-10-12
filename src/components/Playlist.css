@@ -34,6 +34,12 @@
     background-color: #1ed760;
 }
 
+.playlist-duration {
+    display: flex;
+    justify-content: right;
+    align-items: right;
+}
+
 .spotify-logo {
     display: flex;
     justify-content: center;

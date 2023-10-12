@@ -7,9 +7,13 @@ const Playlist = () => {
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [minutes, setMinutes] = useState(25);
   const navigate = useNavigate();
 
   const fetchPlaylist = () => {
+    if (!loading) {
+      setLoading(true);
+    }
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const code_verifier = localStorage.getItem('code_verifier');
@@ -19,7 +23,7 @@ const Playlist = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ 'code':code, 'code_verifier':code_verifier }),
+      body: JSON.stringify({ 'code':code, 'code_verifier':code_verifier, 'minutes':minutes }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -34,7 +38,19 @@ const Playlist = () => {
 
   useEffect(() => {
       fetchPlaylist();
-  }, []);
+  }, [minutes]);
+
+  const handleDurationChange = () => {
+    const newDuration = prompt('Enter new playlist duration in minutes:');
+    if (newDuration !== null && !isNaN(newDuration)) {
+      const durationInMinutes = parseInt(newDuration);
+      if (durationInMinutes <= 200) {
+        setMinutes(durationInMinutes);
+      } else {
+        alert('Maximum allowed duration is 200 minutes. Please enter a valid duration.');
+      }
+    }
+  };
 
   const handleLogout = () => {
     const logoutUrl = 'https://accounts.spotify.com/en/logout';
@@ -56,8 +72,11 @@ const Playlist = () => {
       ) : (
         <div className="playlist-container">
           <SongList songs={songs} />
+          <div className="playlist-duration">
+            Playlist Duration: {minutes} minutes
+          </div>
           <div className="playlist-buttons">
-            <button>Change Duration</button>
+            <button onClick={handleDurationChange}>Change Duration</button>
             {/* <button>Regenerate Playlist</button> */}
             {/* <button>Export to Spotify</button> */}
             <button onClick={handleLogout}>Log Out</button>
