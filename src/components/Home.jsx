@@ -31,7 +31,7 @@ const Home = () => {
     let codeVerifier = generateRandomString(128);
     generateCodeChallenge(codeVerifier).then(codeChallenge => {
       let state = generateRandomString(16);
-      let scope = 'user-library-read';
+      let scope = 'user-library-read playlist-modify-public playlist-modify-private';
       localStorage.setItem('code_verifier', codeVerifier);
       let args = new URLSearchParams({
         response_type: 'code',
