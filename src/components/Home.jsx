@@ -48,7 +48,8 @@ const Home = () => {
 
   return (
     <div className="section">
-      <h2>Pomodoro Method Playlist Generator</h2>
+      <h1>Pomodoro Method Playlist Generator</h1>
+      <h3><i>Login to your Spotify account and receive a 25-minute-long playlist made from your liked songs</i></h3>
       <button className="login-button" onClick={handleLogin}>Login with Spotify</button>
     </div>
   );

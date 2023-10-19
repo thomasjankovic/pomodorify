@@ -8,6 +8,7 @@ body {
     background-image: linear-gradient(165deg, #1db954, #121212 30% 30%);
     background-repeat: no-repeat;
     background-attachment: fixed;
+    text-align: center;
 }
 
 button {

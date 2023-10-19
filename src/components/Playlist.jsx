@@ -10,33 +10,39 @@ const Playlist = () => {
   const [minutes, setMinutes] = useState(25);
   const navigate = useNavigate();
 
-  const fetchPlaylist = () => {
+  async function fetchPlaylist() {
     if (!loading) {
       setLoading(true);
     }
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const code_verifier = localStorage.getItem('code_verifier');
-    // fetch('http://localhost:8080', {
-    fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 'code':code, 'code_verifier':code_verifier, 'minutes':minutes, 'export':false }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
+    try {
+      // const response = await fetch('http://localhost:8080', {
+      const response = await fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 'code':code, 'code_verifier':code_verifier, 'minutes':minutes, 'export':false }),
+      });
+      if (response.status === 500) {
+        const errorMessage = await response.text();
+        setError(errorMessage);
+        setLoading(false);
+        alert(errorMessage);
+      } else {
+        const data = await response.json();
         setSongs(data);
         setLoading(false);
-      })
-      .catch((error) => {
-        setError('An error occurred while fetching data.');
-        setLoading(false);
-        alert('Session timed out. Please log back in.')
-        handleLogout();
-      });
-  }
+      }
+    } catch (error) {
+      setError('An error occurred while fetching data.');
+      setLoading(false);
+      alert('Session timed out.')
+      handleLogout();
+    }
+  }  
 
   useEffect(() => {
       fetchPlaylist();
@@ -46,10 +52,10 @@ const Playlist = () => {
     const newDuration = prompt('Enter new playlist duration in minutes:');
     if (newDuration !== null && !isNaN(newDuration)) {
       const durationInMinutes = parseInt(newDuration);
-      if (durationInMinutes <= 200) {
+      if (durationInMinutes <= 900) {
         setMinutes(durationInMinutes);
       } else {
-        alert('Maximum allowed duration is 200 minutes. Please enter a valid duration.');
+        alert('Maximum allowed duration is 900 minutes. Please enter a valid duration.');
       }
     }
   };
@@ -69,10 +75,11 @@ const Playlist = () => {
       .then((response) => response.text())
       .then((url) => {
         window.open(url, '_blank', 'noopener,noreferrer');
+        alert('Your playlist has been successfully exported to Spotify.')
       })
       .catch((error) => {
         setError('An error occured while exporting playlist.');
-        alert('Session timed out. Please log back in.')
+        alert('Session timed out.')
         handleLogout();
       });
   }
