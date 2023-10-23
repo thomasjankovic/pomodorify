@@ -6,7 +6,6 @@ import './Playlist.css';
 const Playlist = () => {
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [minutes, setMinutes] = useState(25);
   const navigate = useNavigate();
 
@@ -28,18 +27,26 @@ const Playlist = () => {
       });
       if (response.status === 500) {
         const errorMessage = await response.text();
-        setError(errorMessage);
-        setLoading(false);
-        alert(errorMessage);
+        if (errorMessage == "Unable to create a playlist of selected duration based on your Spotify library.") {
+          setLoading(false);
+          alert(errorMessage);
+          setMinutes(25);
+        } else {
+          console.log('Unknown code 500 server error.')
+        }
       } else {
         const data = await response.json();
         setSongs(data);
         setLoading(false);
       }
     } catch (error) {
-      setError('An error occurred while fetching data.');
       setLoading(false);
-      alert('Session timed out.')
+      // alert('Session timed out.')
+      alert(`
+        Error type: ${error.name}
+        Error code: ${error.code}
+        Error message: ${error.message}
+      `);
       handleLogout();
     }
   }  
@@ -78,8 +85,11 @@ const Playlist = () => {
         alert('Your playlist has been successfully exported to Spotify.')
       })
       .catch((error) => {
-        setError('An error occured while exporting playlist.');
-        alert('Session timed out.')
+        alert(`
+          Error type: ${error.name}
+          Error code: ${error.code}
+          Error message: ${error.message}
+        `);
         handleLogout();
       });
   }
@@ -93,7 +103,7 @@ const Playlist = () => {
     } else if (title.length > max_title_length) {
       alert(`Title is too long (max ${max_title_length} characters). Please enter a shorter title.`);
       handleExportRequest();
-    } else {
+    } else if (title != null) {
       exportPlaylist(title);
     }
   };
@@ -119,6 +129,13 @@ const Playlist = () => {
       .then((result) => {
         // console.log(result);
       })
+      .catch((error) => {
+        alert(`
+          Error type: ${error.name}
+          Error code: ${error.code}
+          Error message: ${error.message}
+        `);
+      });
   };  
     
   return (
