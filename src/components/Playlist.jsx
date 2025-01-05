@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import SongList from './SongList';
+import TrackList from './TrackList';
 import './Playlist.css';
 
 const Playlist = () => {
-  const [songs, setSongs] = useState([]);
+  const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [minutes, setMinutes] = useState(25);
+  const [removedTracks, setRemovedTracks] = useState([]);
   const navigate = useNavigate();
 
   async function fetchPlaylist() {
@@ -17,13 +18,13 @@ const Playlist = () => {
     const code = urlParams.get('code');
     const code_verifier = localStorage.getItem('code_verifier');
     try {
-      // const response = await fetch('http://localhost:8080', {
-      const response = await fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
+      const response = await fetch('http://localhost:8080', { // Uncomment to run locally
+      // const response = await fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', { // Uncomment to run in production
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'code':code, 'code_verifier':code_verifier, 'minutes':minutes, 'export':false }),
+        body: JSON.stringify({ 'code':code, 'code_verifier':code_verifier, 'minutes':minutes, 'removed_tracks':removedTracks, 'export':false }),
       });
       if (response.status === 500) {
         const errorMessage = await response.text();
@@ -36,7 +37,7 @@ const Playlist = () => {
         }
       } else {
         const data = await response.json();
-        setSongs(data);
+        setTracks(data);
         setLoading(false);
       }
     } catch (error) {
@@ -53,7 +54,7 @@ const Playlist = () => {
 
   useEffect(() => {
       fetchPlaylist();
-  }, [minutes]);
+  }, [minutes, removedTracks]);
 
   const handleDurationChange = () => {
     const newDuration = prompt('Enter new playlist duration in minutes:');
@@ -67,12 +68,16 @@ const Playlist = () => {
     }
   };
 
+  const handleRemoveTrack = (track_id) => {
+    setRemovedTracks((prev) => [...prev, track_id]);
+  };
+
   const exportPlaylist = (title) => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const code_verifier = localStorage.getItem('code_verifier');
-    // fetch('http://localhost:8080', {
-    fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
+    fetch('http://localhost:8080', {
+    // fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,8 +122,8 @@ const Playlist = () => {
       navigate('/');
     }, 1000);
 
-    // fetch('http://localhost:8080', {
-    fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
+    fetch('http://localhost:8080', {
+    // fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -136,7 +141,7 @@ const Playlist = () => {
           Error message: ${error.message}
         `);
       });
-  };  
+  };
     
   return (
     <div>
@@ -147,13 +152,12 @@ const Playlist = () => {
         </div>
       ) : (
         <div className="playlist-container">
-          <SongList songs={songs} />
+          <TrackList tracks={tracks} onRemove={handleRemoveTrack} />
           <div className="playlist-duration">
             Playlist Duration: {minutes} minutes
           </div>
           <div className="playlist-buttons">
             <button onClick={handleDurationChange}>Change Duration</button>
-            {/* <button>Regenerate Playlist</button> */}
             <button onClick={handleExportRequest}>Export to Spotify</button>
             <button onClick={handleLogout}>Log Out</button>
           </div>

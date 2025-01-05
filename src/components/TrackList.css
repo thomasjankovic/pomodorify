@@ -1,11 +1,11 @@
-.song-list-container {
+.track-list-container {
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.5rem;
     margin-bottom: 1rem;
 }
 
-.song-list-item {
+.track-list-item {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr 2fr 2fr 1fr;
     align-items: center;
@@ -17,13 +17,13 @@
     box-shadow: 4px 4px 50px 0px #121212;
 }
   
-.song-list-item img {
+.track-list-item img {
     width: 5rem;
     height: 5rem;
     object-fit: cover;
 }
   
-.song-list-header {
+.track-list-header {
     display: grid;
     grid-template-columns: 1fr 1fr 2fr 2fr 2fr 1fr;
     align-items: center;
@@ -33,11 +33,11 @@
 }
   
 @media screen and (max-width: 50rem) {
-    .song-list-item {
+    .track-list-item {
         grid-template-columns: 1fr 1fr;
     }
 
-    .song-list-item img {
+    .track-list-item img {
         width: 100%;
         height: auto;
         max-width: 5rem;
@@ -46,12 +46,12 @@
 }
 
 @media screen and (max-width: 30rem) {
-    .song-list-item {
+    .track-list-item {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto auto auto;
     }
 
-    .song-list-item img {
+    .track-list-item img {
         grid-row: 1 / span 4;
         width: 100%;
         height: auto;
@@ -59,7 +59,7 @@
         max-height: 10rem;
     }
 
-    .song-list-header {
+    .track-list-header {
         display: none;
     }
 }
