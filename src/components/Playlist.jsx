@@ -8,6 +8,7 @@ const Playlist = () => {
   const [loading, setLoading] = useState(true);
   const [minutes, setMinutes] = useState(25);
   const [removedTracks, setRemovedTracks] = useState([]);
+  const [finalTrackId, setFinalTrackId] = useState('');
   const navigate = useNavigate();
 
   async function fetchPlaylist() {
@@ -24,7 +25,7 @@ const Playlist = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'code':code, 'code_verifier':code_verifier, 'minutes':minutes, 'removed_tracks':removedTracks, 'export':false }),
+        body: JSON.stringify({ 'code':code, 'code_verifier':code_verifier, 'minutes':minutes, 'removed_tracks':removedTracks, 'final_track_id': finalTrackId,'export':false }),
       });
       if (response.status === 500) {
         const errorMessage = await response.text();
@@ -53,8 +54,8 @@ const Playlist = () => {
   }  
 
   useEffect(() => {
-      fetchPlaylist();
-  }, [minutes, removedTracks]);
+    fetchPlaylist();
+  }, [minutes, removedTracks, finalTrackId]);
 
   const handleDurationChange = () => {
     const newDuration = prompt('Enter new playlist duration in minutes:');
@@ -65,6 +66,15 @@ const Playlist = () => {
       } else {
         alert('Maximum allowed duration is 900 minutes. Please enter a valid duration.');
       }
+    }
+  };
+
+  const handleTrackRefresh = () => {
+    if (tracks.length > 0) {
+      const thisFinalTrackId = tracks[tracks.length - 1].id;
+      setFinalTrackId(thisFinalTrackId);
+    } else {
+      alert('No tracks in the playlist to refresh.');
     }
   };
 
@@ -158,6 +168,7 @@ const Playlist = () => {
           </div>
           <div className="playlist-buttons">
             <button onClick={handleDurationChange}>Change Duration</button>
+            <button onClick={handleTrackRefresh}>Refresh Tracks</button>
             <button onClick={handleExportRequest}>Export to Spotify</button>
             <button onClick={handleLogout}>Log Out</button>
           </div>

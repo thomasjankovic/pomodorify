@@ -26,8 +26,8 @@ const Home = () => {
 
   const handleLogin = () => {
     const clientId = '99a9dbf0e4c44cca8f6218283681116a';
-    const redirectUri = 'http://localhost:3000/playlist'; // Uncomment to run locally
-    // const redirectUri = 'https://pomodorify.thomasjankovic.com/playlist'; // Uncomment to run in production
+    // const redirectUri = 'http://localhost:3000/playlist'; // Uncomment to run locally
+    const redirectUri = 'https://pomodorify.thomasjankovic.com/playlist'; // Uncomment to run in production
     let codeVerifier = generateRandomString(128);
     generateCodeChallenge(codeVerifier).then(codeChallenge => {
       let state = generateRandomString(16);
