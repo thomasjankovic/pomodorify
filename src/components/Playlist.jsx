@@ -19,8 +19,8 @@ const Playlist = () => {
     const code = urlParams.get('code');
     const code_verifier = localStorage.getItem('code_verifier');
     try {
-      const response = await fetch('http://localhost:8080', { // Uncomment to run locally
-      // const response = await fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', { // Uncomment to run in production
+      // const response = await fetch('http://localhost:8080', { // Uncomment to run locally.
+      const response = await fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', { // Uncomment to run in production.
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -86,8 +86,8 @@ const Playlist = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const code_verifier = localStorage.getItem('code_verifier');
-    fetch('http://localhost:8080', {
-    // fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
+    // fetch('http://localhost:8080', { // Uncomment to run in locally.
+    fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', { // Uncomment to run in production.
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
