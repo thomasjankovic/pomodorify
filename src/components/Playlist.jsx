@@ -8,6 +8,7 @@ const Playlist = () => {
   const [loading, setLoading] = useState(true);
   const [minutes, setMinutes] = useState(25);
   const [removedTracks, setRemovedTracks] = useState([]);
+  const [pinnedTracks, setPinnedTracks] = useState([]);
   const [finalTrackId, setFinalTrackId] = useState('');
   const navigate = useNavigate();
 
@@ -19,13 +20,13 @@ const Playlist = () => {
     const code = urlParams.get('code');
     const code_verifier = localStorage.getItem('code_verifier');
     try {
-      // const response = await fetch('http://localhost:8080', { // Uncomment to run locally.
-      const response = await fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', { // Uncomment to run in production.
+      const response = await fetch('http://localhost:8080', { // Uncomment to run locally.
+      // const response = await fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', { // Uncomment to run in production.
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 'code':code, 'code_verifier':code_verifier, 'minutes':minutes, 'removed_tracks':removedTracks, 'final_track_id': finalTrackId,'export':false }),
+        body: JSON.stringify({ 'code': code, 'code_verifier': code_verifier, 'minutes': minutes, 'removed_tracks': removedTracks, 'pinned_tracks': pinnedTracks, 'final_track_id': finalTrackId, 'export': false }),
       });
       if (response.status === 500) {
         const errorMessage = await response.text();
@@ -51,7 +52,7 @@ const Playlist = () => {
       `);
       handleLogout();
     }
-  }  
+  }
 
   useEffect(() => {
     fetchPlaylist();
@@ -82,12 +83,18 @@ const Playlist = () => {
     setRemovedTracks((prev) => [...prev, track_id]);
   };
 
+  const handleTogglePin = (track_id) => {
+    setPinnedTracks((prevPinned) =>
+      prevPinned.includes(track_id) ? prevPinned.filter((id) => id !== track_id) : [...prevPinned, track_id]
+    );
+  };
+
   const exportPlaylist = (title) => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const code_verifier = localStorage.getItem('code_verifier');
-    // fetch('http://localhost:8080', { // Uncomment to run in locally.
-    fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', { // Uncomment to run in production.
+    fetch('http://localhost:8080', { // Uncomment to run in locally.
+    // fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', { // Uncomment to run in production.
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -132,8 +139,8 @@ const Playlist = () => {
       navigate('/');
     }, 1000);
 
-    fetch('http://localhost:8080', {
-    // fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', {
+    fetch('http://localhost:8080', { // Uncomment to run in locally.
+    // fetch('https://us-central1-direct-landing-293315.cloudfunctions.net/display_playlist', { // Uncomment to run in production.
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -162,13 +169,13 @@ const Playlist = () => {
         </div>
       ) : (
         <div className="playlist-container">
-          <TrackList tracks={tracks} onRemove={handleRemoveTrack} />
+          <TrackList tracks={tracks} onRemove={handleRemoveTrack} onPin={handleTogglePin} pinnedTracks={pinnedTracks}/>
           <div className="playlist-duration">
             Playlist Duration: {minutes} minutes
           </div>
           <div className="playlist-buttons">
             <button onClick={handleDurationChange}>Change Duration</button>
-            <button onClick={handleTrackRefresh}>Refresh Tracks</button>
+            <button onClick={handleTrackRefresh}>New Tracks</button>
             <button onClick={handleExportRequest}>Export to Spotify</button>
             <button onClick={handleLogout}>Log Out</button>
           </div>

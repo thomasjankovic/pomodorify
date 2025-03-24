@@ -1,7 +1,7 @@
 import React from "react";
 import './TrackList.css';
 
-const TrackList = ({ tracks, onRemove }) => {
+const TrackList = ({ tracks, onRemove, onPin, pinnedTracks }) => {
   return (
     <div className="track-list-container">
       <div className="track-list-header">
@@ -11,7 +11,8 @@ const TrackList = ({ tracks, onRemove }) => {
         <div>Artist</div>
         <div>Album</div>
         <div>Duration</div>
-        <div>Actions</div>
+        <div></div>
+        <div></div>
       </div>
       {tracks.map((track, index) => (
         <div className="track-list-item" key={index}>
@@ -27,7 +28,12 @@ const TrackList = ({ tracks, onRemove }) => {
           <div>{track.duration}</div>
           <div>
             <button className="remove-button" onClick={() => onRemove(track.id)}>
-              Remove Track
+              Omit
+            </button>
+          </div>
+          <div>
+            <button className="pin-button" onClick={() => onPin(track.id)}>
+            {pinnedTracks.includes(track.id) ? "Pinned" : "Pin"}
             </button>
           </div>
         </div>
